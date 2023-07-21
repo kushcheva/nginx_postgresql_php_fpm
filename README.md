@@ -23,7 +23,7 @@ postgres=# \l
 (4 rows)
 
 
-Go to the db conteiner and install addition plugins:
+Go to the db container and install addition plugins:
 docker exec -it php /bin/bash
 apt-get -qq update && apt-get -y install libpq-dev 
 
