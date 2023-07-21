@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    env_file: .env
+    volumes: 
+      - ./postgres:/var/lib/postgresql
+    ports:
+      - 5432:5432
+    networks:
+      - app-network
+
+  php:
+    depends_on: 
+      - db
+    image: php:fpm-bullseye
+    container_name: php
+    volumes:
+      - ./web:/var/www/html
+      - ./postgres:/var/lib/postgresql
+    networks:
+      - app-network
+
+  webserver:
+    depends_on:
+      - php
+      - db
+    image: nginx:latest
+    container_name: webserver
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d
+      - ./web:/var/www/html
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge 
